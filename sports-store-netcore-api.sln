@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29409.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sports-store-netcore-api", "sports-store-netcore-api.csproj", "{1880131C-2BB5-4DB7-86E9-18B50430D6AA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1880131C-2BB5-4DB7-86E9-18B50430D6AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1880131C-2BB5-4DB7-86E9-18B50430D6AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1880131C-2BB5-4DB7-86E9-18B50430D6AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1880131C-2BB5-4DB7-86E9-18B50430D6AA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9314DE30-C82F-4C89-8E89-3C211F8ACEAC}
+	EndGlobalSection
+EndGlobal
