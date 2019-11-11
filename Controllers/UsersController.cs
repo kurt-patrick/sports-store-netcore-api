@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using SportsStoreApi.Services;
 using SportsStoreApi.Models;
 using System.Linq;
+using System;
 
 namespace SportsStoreApi.Controllers
 {
@@ -22,11 +23,17 @@ namespace SportsStoreApi.Controllers
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]AuthenticateModel model)
         {
+            Console.WriteLine("Authenticate() -------------------------------");
+            Console.WriteLine($"email: {model.Email}, password: {model.Password}");
             var user = _userService.Authenticate(model.Email, model.Password);
 
             if (user == null)
+            {
+                Console.WriteLine("Authenticate(): match not found");
                 return BadRequest(new { message = "Username or password is incorrect" });
+            }
 
+            Console.WriteLine("Authenticate(): success");
             return Ok(user);
         }
 

@@ -18,6 +18,7 @@ namespace SportsStoreApi
 {
     public class Startup
     {
+        // Config class is injected through di
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -30,15 +31,21 @@ namespace SportsStoreApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
+
+            // Adds services for controllers to the specified Microsoft.Extensions.DependencyInjection.IServiceCollection. This method will not register services used for views or pages.
             services.AddControllers();
 
-            // configure strongly typed settings objects
+            // from the file {root}/appsettings.json
+            // map the json "AppSettings": { ... } to the object AppSettings
+            // then cast the json to AppSettings object
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
-
-            // configure jwt authentication
             var appSettings = appSettingsSection.Get<AppSettings>();
+
+            // convert string into byte[]
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+
+            // configure the authentication method to be JWT
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -58,7 +65,10 @@ namespace SportsStoreApi
             });
 
             // configure DI for application services
+            // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.0#service-lifetimes
+            // Scoped lifetime services (AddScoped) are created once per client request (connection).
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IProductService, ProductService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
