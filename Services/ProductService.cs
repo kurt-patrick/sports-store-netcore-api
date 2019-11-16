@@ -14,6 +14,7 @@ namespace SportsStoreApi.Services
     public interface IProductService
     {
         Product GetById(int id);
+        IEnumerable<Product> GetIn(List<int> ids);
         IEnumerable<Product> GetAll();
     }
 
@@ -105,5 +106,11 @@ namespace SportsStoreApi.Services
         {
             return _products;
         }
+
+        public IEnumerable<Product> GetIn(List<int> ids)
+        {
+            return GetAll().Where(p => ids.Contains(p.Id));
+        }
+
     }
 }
