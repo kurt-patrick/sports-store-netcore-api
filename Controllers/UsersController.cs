@@ -21,7 +21,7 @@ namespace SportsStoreApi.Controllers
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody]AuthenticateModel model)
+        public IActionResult Authenticate([FromBody]Authenticate model)
         {
             Console.WriteLine("Authenticate() -------------------------------");
             Console.WriteLine($"email: {model.Email}, password: {model.Password}");

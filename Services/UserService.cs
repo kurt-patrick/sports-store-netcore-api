@@ -13,7 +13,8 @@ namespace SportsStoreApi.Services
 {
     public interface IUserService
     {
-        User Authenticate(string username, string password);
+        User GetById(int id);
+        User Authenticate(string email, string password);
         IEnumerable<User> GetAll();
     }
 
@@ -32,13 +33,25 @@ namespace SportsStoreApi.Services
             _appSettings = appSettings.Value;
         }
 
+        public User GetById(int id)
+        {
+            var user = _users.SingleOrDefault(x => id == x.Id);
+            if (user == null)
+            {
+                return null;
+            }
+            return user.WithoutPassword();
+        }
+
         public User Authenticate(string email, string password)
         {
             var user = _users.SingleOrDefault(x => x.Email == email && x.Password == password);
 
             // return null if user not found
             if (user == null)
+            {
                 return null;
+            }
 
             // authentication successful so generate jwt token
             var tokenHandler = new JwtSecurityTokenHandler();

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SportsStoreApi.Models
 {
-    public class AuthenticateModel
+    public class Authenticate
     {
         [Required]
         public string Email { get; set; }
