@@ -29,12 +29,6 @@ namespace SportsStoreApi.Controllers
             Console.WriteLine($"{nameof(Submit)} -------------------------------");
             Console.WriteLine($"UserId: {model.UserId}");
 
-            if (model.UserId < 1)
-            {
-                Console.WriteLine("model.UserId < 1");
-                return BadRequest(new { message = "Invalid UserID" });
-            }
-
             if (model.Products == null || model.Products.Count(p => p != null) < 1)
             {
                 Console.WriteLine("model.UserId < 1");
@@ -62,7 +56,14 @@ namespace SportsStoreApi.Controllers
                 return BadRequest(new { message = "not all products were found" });
             }
 
+            Console.WriteLine("_orderService.Save(model);");
             var newOrder = _orderService.Save(model);
+
+            if(string.IsNullOrWhiteSpace(newOrder.OrderId))
+            {
+                Console.WriteLine("newOrder.OrderId is empty. failed to save");
+                return BadRequest(new { message = "Failed to save order. Please try again" });
+            }
 
             Console.WriteLine("success");
             return Ok(newOrder);

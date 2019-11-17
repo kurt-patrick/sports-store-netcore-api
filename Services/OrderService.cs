@@ -14,17 +14,22 @@ namespace SportsStoreApi.Services
 {
     public interface IOrderService
     {
-        Order Save(OrderSubmission order);
+        OrderSubmission Save(OrderSubmission order);
     }
 
     public class OrderService : IOrderService
     {
-        private List<Order> _orders = new List<Order>();
-        public Order Save(OrderSubmission order)
+        private static List<OrderSubmission> _orders = new List<OrderSubmission>();
+        public OrderSubmission Save(OrderSubmission order)
         {
-            Order newOrder = order as Order;
-            _orders.Add(newOrder);
-            return newOrder;
+            Console.WriteLine("OrderService.Save()");
+            if (order == null)
+            {
+                throw new ArgumentNullException(nameof(order));
+            }
+            _orders.Add(order);
+            Console.WriteLine("Orders count: " + _orders.Count.ToString());
+            return order;
         }
     }
 
