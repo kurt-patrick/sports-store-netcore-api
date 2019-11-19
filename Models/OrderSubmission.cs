@@ -21,7 +21,7 @@ namespace SportsStoreApi.Models
             public int Id { get; set; }
 
             [Required]
-            [Range(1, int.MaxValue, ErrorMessage = "At least 1 quanityt is required")]
+            [Range(1, int.MaxValue, ErrorMessage = "At least 1 quantity is required")]
             public int Quantity { get; set; }
         }
 

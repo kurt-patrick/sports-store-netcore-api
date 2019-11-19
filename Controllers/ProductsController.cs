@@ -36,6 +36,14 @@ namespace SportsStoreApi.Controllers
             return Ok(product);
         }
 
+        [HttpGet("/products/search")]
+        public IActionResult Search([FromQuery(Name = "name")] string name, [FromQuery(Name = "desc")] string desc)
+        {
+            Console.WriteLine($"ProductsController.Search({name}) -------------------------------");
+            var products = _productService.Search(name);
+            return Ok(products);
+        }
+
         [HttpGet]
         public IActionResult GetAll()
         {
