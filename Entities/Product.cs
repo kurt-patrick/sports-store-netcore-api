@@ -1,8 +1,8 @@
 namespace SportsStoreApi.Entities
 {
     public enum Gender {
-        mens = 0,
-        womens = 1
+        Mens = 0,
+        Womens = 1
     }
 
     public class Product

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -64,12 +65,22 @@ namespace SportsStoreApi
                 };
             });
 
+            // Database context
+            // TODO: add config file
+            // https://hackernoon.com/asp-net-core-how-to-use-dependency-injection-in-entity-framework-core-4388fc5c148b
+            // services.AddDbContext<StoreContext>(options => options.UseMySQL(Configuration["ConnectionStrings:DefaultConnection"]));
+            Console.WriteLine("services.AddDbContext<StoreContext>(");
+            services.AddDbContext<StoreContext>(
+                options => options.UseMySQL("server=mysql-db;database=sportstore;user=root;password=password"));
+
             // configure DI for application services
             // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.0#service-lifetimes
             // Scoped lifetime services (AddScoped) are created once per client request (connection).
+            Console.WriteLine("services.AddScoped");
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IOrderService, OrderService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
