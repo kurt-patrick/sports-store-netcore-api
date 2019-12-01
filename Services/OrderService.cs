@@ -1,22 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using SportsStoreApi.Entities;
-using SportsStoreApi.Helpers;
+using SportsStoreApi.Interfaces;
 using SportsStoreApi.Models;
 
 namespace SportsStoreApi.Services
 {
-    public interface IOrderService
-    {
-        OrderSubmission Save(OrderSubmission order);
-    }
-
     public class OrderService : IOrderService
     {
         private static List<OrderSubmission> _orders = new List<OrderSubmission>();

@@ -4,6 +4,7 @@ using SportsStoreApi.Services;
 using SportsStoreApi.Models;
 using System.Linq;
 using System;
+using SportsStoreApi.Interfaces;
 
 namespace SportsStoreApi.Controllers
 {

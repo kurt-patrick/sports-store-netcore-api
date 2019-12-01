@@ -4,6 +4,7 @@ using SportsStoreApi.Services;
 using SportsStoreApi.Models;
 using System.Linq;
 using System;
+using SportsStoreApi.Interfaces;
 
 namespace SportsStoreApi.Controllers
 {
@@ -43,5 +44,22 @@ namespace SportsStoreApi.Controllers
             var users = _userService.GetAll();
             return Ok(users);
         }
+
+        [HttpGet("/users/{id}")]
+        public IActionResult Get(int id)
+        {
+            Console.WriteLine($"userssController.Get({id}) -------------------------------");
+            var user = _userService.GetById(id);
+
+            if (user == null)
+            {
+                Console.WriteLine("match not found");
+                return NotFound(id);
+            }
+
+            Console.WriteLine("Get(): success");
+            return Ok(user);
+        }
+
     }
 }

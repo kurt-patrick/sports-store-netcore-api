@@ -78,10 +78,18 @@ namespace SportsStoreApi.SeedData
                 ImageUrl = "https://images.footlocker.com/is/image/EBFL2/22992062_a1?wid=640&hei=640&fmt=png-alpha",
                 Gender = Gender.Mens,
                 ColourDescription = "Black/Varsity Red/White"
+            },
+            new Product() {
+                Id = 10,
+                ProductName = "Jordan AJ 5",
+                ProductPrice =  280.00m,
+                ImageUrl = "https://runnerspoint.scene7.com/is/image/rpe/314100688804_02?fit=constrain,1&wid=640&hei=640&fmt=jpg",
+                Gender = Gender.Mens,
+                ColourDescription = "Varsity Royal-Maize"
             }
         };
 
-        public static Product[] Data => _products.ToArray();
+        public static Product[] Products => _products.ToArray();
 
     }
 }

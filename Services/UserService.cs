@@ -8,34 +8,30 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SportsStoreApi.Entities;
 using SportsStoreApi.Helpers;
+using SportsStoreApi.Interfaces;
 
 namespace SportsStoreApi.Services
 {
-    public interface IUserService
-    {
-        User GetById(int id);
-        User Authenticate(string email, string password);
-        IEnumerable<User> GetAll();
-    }
-
     public class UserService : IUserService
     {
-        // users hardcoded for simplicity, store in a db with hashed passwords in production applications
-        private List<User> _users = new List<User>
-        {
-            new User { Id = 1, FirstName = "Test", LastName = "User", Email = "dev@email.com", Password = "password" }
-        };
-
         private readonly AppSettings _appSettings;
+        private readonly StoreContext _storeContext;
 
-        public UserService(IOptions<AppSettings> appSettings)
+        public UserService(StoreContext storeContext, IOptions<AppSettings> appSettings)
         {
+            if(storeContext == null)
+            {
+                throw new ArgumentNullException(nameof(storeContext));
+            }
             _appSettings = appSettings.Value;
+            this._storeContext = storeContext;
+            // this call is required for the table to be created
+            storeContext.Database.EnsureCreated();
         }
 
         public User GetById(int id)
         {
-            var user = _users.SingleOrDefault(x => id == x.Id);
+            var user = _storeContext.Users.FirstOrDefault(x => id == x.Id);
             if (user == null)
             {
                 return null;
@@ -45,15 +41,12 @@ namespace SportsStoreApi.Services
 
         public User Authenticate(string email, string password)
         {
-            var user = _users.SingleOrDefault(x => x.Email == email && x.Password == password);
-
-            // return null if user not found
+            var user = _storeContext.Users.FirstOrDefault(x => x.Email == email && x.Password == password);
             if (user == null)
             {
                 return null;
             }
 
-            // authentication successful so generate jwt token
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -73,7 +66,7 @@ namespace SportsStoreApi.Services
 
         public IEnumerable<User> GetAll()
         {
-            return _users.WithoutPasswords();
+            return _storeContext.Users.WithoutPasswords();
         }
     }
 }

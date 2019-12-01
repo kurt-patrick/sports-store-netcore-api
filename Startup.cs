@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using SportsStoreApi.Helpers;
+using SportsStoreApi.Interfaces;
 using SportsStoreApi.Services;
 
 namespace SportsStoreApi

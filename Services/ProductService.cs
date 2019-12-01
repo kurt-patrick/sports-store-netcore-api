@@ -1,24 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using SportsStoreApi.Entities;
-using SportsStoreApi.Helpers;
+using SportsStoreApi.Interfaces;
 
 namespace SportsStoreApi.Services
 {
-    public interface IProductService
-    {
-        Product GetById(int id);
-        IEnumerable<Product> Search(string name);
-        IEnumerable<Product> GetIn(List<int> ids);
-        IEnumerable<Product> GetAll();
-    }
-
     public class ProductService : IProductService
     {
         private readonly StoreContext _storeContext;
