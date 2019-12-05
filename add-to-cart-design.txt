@@ -1,0 +1,103 @@
+
+
+// adding items to cart design
+
+create a new session
+GET     /api/v1/target/session?
+
+get the current session and check still valid
+
+GET     /api/v1/target/session?_=1575196143684
+
+Response:
+{
+    "success":true,
+    "data":{
+        "session":{
+            "guest":true,
+            "csrfToken":"7c663426-6bdb-4274-84ce-bd2f6c31c917",
+            "customer":{}
+        }
+    }
+}
+
+POST    /api/v1/target/cart/add?_=1575196143998
+Body:
+{
+    "products":[
+        {
+            "productCode":"62888424",
+            "quantity":1
+        }
+    ],
+    "_csrf":"7c663426-6bdb-4274-84ce-bd2f6c31c917"
+}
+
+Response:
+{
+    "success":true,
+    "data":{
+        "errorItems":[],
+        "updated":{
+            "quantity":1,
+            "exprice":{ "value":18.18 },
+            "incprice":{ "value":20.0 },
+            "extotal":{ "value":18.18 },
+            "inctotal":{ "value":20.0 },
+            "product":{
+                "code":"62888424",
+                "name":"Playstation Print T-Shirt Plus - Navy",
+            }
+        },
+        "cart":{
+            "id":"60327336",
+            "extotal":{ "value":18.18 },
+            "inctotal":{ "value":20.0 },
+            "gst":{ "value":1.82 },
+            "entries":[
+                {
+                    "entryNumber":0,
+                    "quantity":1,
+                    "exprice":{ "value":18.18 },
+                    "incprice":{ "value":20.0 },
+                    "extotal":{ "value":18.18 },
+                    "inctotal":{ "value":20.0 },
+                    "product":{
+                        "code":"62888424",
+                        "name":"Playstation Print T-Shirt Plus - Navy",
+                    }
+                }
+            ]
+        }
+    }
+}
+
+
+GET     /api/v1/target/cart?skipSohCheck=true&_=1575197781197
+Response:
+{
+    "success":true,
+    "data":{
+        "errorItems":[],
+        "cart":{
+            "id":"60327336",
+            "extotal":{ "value":18.18 },
+            "inctotal":{ "value":20.0 },
+            "gst":{ "value":1.82 },
+            "entries":[
+                {
+                    "entryNumber":0,
+                    "quantity":1,
+                    "exprice":{ "value":18.18 },
+                    "incprice":{ "value":20.0 },
+                    "extotal":{ "value":18.18 },
+                    "inctotal":{ "value":20.0 },
+                    "product":{
+                        "code":"62888424",
+                        "name":"Playstation Print T-Shirt Plus - Navy",
+                    }
+                }
+            ]
+        }
+    }
+}

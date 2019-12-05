@@ -66,6 +66,8 @@ namespace SportsStoreApi
                 };
             });
 
+            services.AddMemoryCache();
+            
             // Database context
             // TODO: add config file
             // https://hackernoon.com/asp-net-core-how-to-use-dependency-injection-in-entity-framework-core-4388fc5c148b
