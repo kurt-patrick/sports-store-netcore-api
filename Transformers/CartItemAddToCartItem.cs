@@ -17,6 +17,8 @@ namespace SportsStoreApi.Transformers
             cartItem.ProductId = product.Id;
             cartItem.ProductName = product.ProductName;
             cartItem.Quantity = model.Quantity;
+            cartItem.Description = product.ColourDescription;
+            cartItem.ImageUrl = product.ImageUrl;
             return cartItem;
         }
         
