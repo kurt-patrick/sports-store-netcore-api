@@ -9,7 +9,6 @@ namespace SportsStoreApi.Controllers
     [Route("[controller]")]
     public class CartController : ControllerBase
     {
-        private const string CACHE_KEY_CART = "cart";
         private readonly IMemoryCache _cache;
         private readonly IProductService _productService;
 
@@ -19,25 +18,22 @@ namespace SportsStoreApi.Controllers
             _productService = productService;
         }
 
-        private Entities.Cart GetCartFromCache()
+        private Entities.Cart GetCartFromCache(string guid)
         {
-            var cart = _cache.GetOrCreate(CACHE_KEY_CART, entry =>
+            var retVal = _cache.GetOrCreate(guid, entry =>
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(4);
                 return new Entities.Cart();
             });
-            return cart;
+            return retVal;
         }
 
-        private void SaveCartToCache(Entities.Cart cart)
-        {
-            _cache.Set(CACHE_KEY_CART, cart);
-        }
+        private void SaveCartToCache(Entities.Cart cart) => _cache.Set(cart.Guid, cart);
 
-        [HttpPost("/cart/add")]
-        public IActionResult AddItem([FromBody]Models.CartItemAdd model)
+        [HttpPost("/cart/{guid}/add")]
+        public IActionResult AddItem([FromBody]Models.CartItemAdd model, string guid)
         {
-            Console.WriteLine($"AddItem(productId: {model.ProductId}, qty: {model.Quantity}) -------------------------------");
+            Console.WriteLine($"AddItem(productId: {model.ProductId}, qty: {model.Quantity}, guid: {guid??""}) -------------------------------");
             var product = _productService.GetById(model.ProductId);
             if (product == null)
             {
@@ -45,7 +41,7 @@ namespace SportsStoreApi.Controllers
                 return BadRequest(new { message = "Product not found: " + model.ProductId });
             }
 
-            var cart = GetCartFromCache();
+            var cart = GetCartFromCache(guid);
             var cartItem = Transformers.CartItemAddToCartItem.Transform(model, product);
             cart.AddItem(cartItem);
             SaveCartToCache(cart);
@@ -54,28 +50,36 @@ namespace SportsStoreApi.Controllers
             return Ok(cart);
         }
 
-        [HttpPost("/cart/remove")]
-        public IActionResult RemoveItem([FromBody]Models.CartItemRemove model)
+        [HttpPost("/cart/{guid}/remove")]
+        public IActionResult RemoveItem([FromBody]Models.CartItemRemove model, string guid)
         {
-            Console.WriteLine($"RemoveItem(productId: {model.ProductId}) -------------------------------");
-            var cart = GetCartFromCache();
+            Console.WriteLine($"RemoveItem(productId: {model.ProductId}, guid: {guid??""}) -------------------------------");
+            var cart = GetCartFromCache(guid);
             cart.RemoveItem(model.ProductId);
             SaveCartToCache(cart);
             Console.WriteLine("RemoveItem(): success");
             return Ok(cart);
         }
 
-        [HttpGet("/cart")]
-        public IActionResult GetCart()
+        [HttpGet("/cart/create")]
+        public IActionResult CreateCart()
         {
-            var cart = GetCartFromCache();
+            var cart = new Entities.Cart();
+            SaveCartToCache(cart);
             return Ok(cart);
         }
 
-        [HttpGet("/cart/clear")]
-        public IActionResult ClearCart()
+        [HttpGet("/cart/{guid}")]
+        public IActionResult GetCart(string guid)
         {
-            var cart = GetCartFromCache();
+            var cart = GetCartFromCache(guid);
+            return Ok(cart);
+        }
+
+        [HttpGet("/cart/{guid}/clear")]
+        public IActionResult ClearCart(string guid)
+        {
+            var cart = GetCartFromCache(guid);
             cart.ClearCart();
             SaveCartToCache(cart);
             return Ok(cart);

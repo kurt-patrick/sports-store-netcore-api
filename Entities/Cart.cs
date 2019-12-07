@@ -5,6 +5,7 @@ namespace SportsStoreApi.Entities
 {
     public class Cart
     {
+        public string Guid { get; set; } = System.Guid.NewGuid().ToString();
         public int Id { get; set; }
         public decimal ExTotal { get; set; }
         public decimal IncTotal { get; set; }
