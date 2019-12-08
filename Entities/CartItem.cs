@@ -2,7 +2,6 @@ namespace SportsStoreApi.Entities
 {
     public class CartItem
     {
-        public int Id { get; set; }
         public decimal ExPrice { get; set; }
         public decimal IncPrice { get; set; }
         public decimal Gst { get; set; }

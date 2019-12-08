@@ -6,10 +6,10 @@ namespace SportsStoreApi.Entities
     public class Cart
     {
         public string Guid { get; set; } = System.Guid.NewGuid().ToString();
-        public int Id { get; set; }
         public decimal ExTotal { get; set; }
         public decimal IncTotal { get; set; }
         public decimal Gst { get; set; }
+        public int QuantityTotal { get; set; }
         public List<CartItem> Items {get; set; } = new List<CartItem>();
 
         public void AddItem(CartItem item)
@@ -47,6 +47,7 @@ namespace SportsStoreApi.Entities
             this.ExTotal = this.Items.Sum(item => item.ExTotal);
             this.IncTotal = this.Items.Sum(item => item.IncTotal);
             this.Gst = this.Items.Sum(item => item.GstTotal);
+            this.QuantityTotal = this.Items.Sum(item => item.Quantity);
         }
 
         private int IndexOfItem(int productId)
