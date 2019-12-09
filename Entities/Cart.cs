@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -5,12 +6,24 @@ namespace SportsStoreApi.Entities
 {
     public class Cart
     {
-        public string Guid { get; set; } = System.Guid.NewGuid().ToString();
+        public string Guid { get; set; }
         public decimal ExTotal { get; set; }
         public decimal IncTotal { get; set; }
         public decimal Gst { get; set; }
         public int QuantityTotal { get; set; }
         public List<CartItem> Items {get; set; } = new List<CartItem>();
+
+        public Cart() : this(System.Guid.NewGuid().ToString())
+        {
+        }
+
+        internal Cart(string guid)
+        {
+            if (string.IsNullOrWhiteSpace(guid) || guid.Trim().Length != 36) {
+                throw new ArgumentException("Invalid guid");
+            }
+            this.Guid = guid.Trim();
+        }
 
         public void AddItem(CartItem item)
         {

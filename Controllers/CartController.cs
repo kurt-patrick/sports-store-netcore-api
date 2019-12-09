@@ -23,7 +23,7 @@ namespace SportsStoreApi.Controllers
             var retVal = _cache.GetOrCreate(guid, entry =>
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(4);
-                return new Entities.Cart();
+                return new Entities.Cart(guid);
             });
             return retVal;
         }
