@@ -11,7 +11,7 @@ namespace SportsStoreApi.Entities
         public decimal IncTotal { get; set; }
         public decimal Gst { get; set; }
         public int QuantityTotal { get; set; }
-        public List<CartItem> Items {get; set; } = new List<CartItem>();
+        public List<IItemBase> Items {get; set; } = new List<IItemBase>();
 
         public Cart() : this(System.Guid.NewGuid().ToString())
         {
@@ -25,7 +25,7 @@ namespace SportsStoreApi.Entities
             this.Guid = guid.Trim();
         }
 
-        public void AddItem(CartItem item)
+        public void AddItem(IItemBase item)
         {
             int index = this.IndexOfItem(item.ProductId);
             if(index == -1)

@@ -1,6 +1,21 @@
 namespace SportsStoreApi.Entities
 {
-    public class CartItem
+    public interface IItemBase
+    {
+        decimal ExPrice { get; set; }
+        decimal IncPrice { get; set; }
+        decimal Gst { get; set; }
+        decimal ExTotal { get; set; }
+        decimal IncTotal { get; set; }
+        decimal GstTotal { get; set; }
+        int ProductId { get; set; }
+        string ProductName { get; set; }
+        int Quantity { get; set; }
+        string ImageUrl { get; set; }
+        string Description { get; set; }
+    }
+
+    public class CartItem : IItemBase
     {
         public decimal ExPrice { get; set; }
         public decimal IncPrice { get; set; }

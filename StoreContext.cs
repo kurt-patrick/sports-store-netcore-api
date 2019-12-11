@@ -34,6 +34,7 @@ namespace SportsStoreApi
                 entity.Property(e => e.Password).IsRequired();
             });
 
+            modelBuilder.Entity<Order>().HasMany(m => m.Items);
             modelBuilder.Entity<Product>().HasData(SeedData.ProductSeedData.Products);
             modelBuilder.Entity<User>().HasData(SeedData.UserSeedData.Users);
         }
