@@ -1,9 +1,9 @@
-using SportsStoreApi.Models;
+using SportsStoreApi.Entities;
 
 namespace SportsStoreApi.Interfaces
 {
     public interface IOrderService
     {
-        OrderSubmission Save(OrderSubmission order);
+        int Save(Order order);
     }
 }

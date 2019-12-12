@@ -11,8 +11,13 @@ namespace SportsStoreApi.Helpers
         }
 
         public static User WithoutPassword(this User user) {
-            user.Password = null;
-            return user;
+            var newUser = new User();
+            newUser.Email = user.Email;
+            newUser.FirstName = user.FirstName;
+            newUser.Id = user.Id;
+            newUser.LastName = user.LastName;
+            newUser.Token = user.Token;
+            return newUser;
         }
     }
 }

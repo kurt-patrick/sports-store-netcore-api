@@ -89,53 +89,5 @@ namespace SportsStoreApi.Controllers
             return Ok(cart);
         }
 
-        [Authorize]
-        [HttpGet("/cart/{guid}/submit")]
-        public IActionResult SubmitCart(string guid)
-        {
-            if(string.IsNullOrWhiteSpace(guid))
-            {
-                Console.WriteLine($"SubmitCart({guid??""}): guid is null or empty");
-                return BadRequest(new { message = "Invalid cart guid" });
-            }
-
-            if(!_cache.TryGetValue(guid, out Entities.Cart cart))
-            {
-                Console.WriteLine($"SubmitCart({guid??""}): guid not found in cache");
-                return BadRequest(new { message = "Invalid cart guid" });
-            }
-
-            if (cart.Items.Count < 1)
-            {
-                Console.WriteLine($"SubmitCart({guid}): item count < 1");
-                return BadRequest(new { message = "Cart must contain at least 1 item" });
-            }
-            if (cart.ExTotal < 0)
-            {
-                Console.WriteLine($"SubmitCart({guid}): cart.ExTotal < 0");
-                return BadRequest(new { message = "Cart total is invalid" });
-            }
-
-            // get the login in user
-            var claimsIdentity = this.User.Identity as ClaimsIdentity;
-            var userIdStr = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
-            Console.WriteLine($"userIdStr: {userIdStr??""}");
-            Int32.TryParse(userIdStr, out int userId);
-            Console.WriteLine($"userId: {userId}");
-
-            var user = _userService.GetById(userId);
-            if(user == null) 
-            {
-                return BadRequest(new { message = "Unknown user associated to cart" });
-            }
-
-            Entities.Order order = Transformers.CartToOrderTransformer.Transform(cart);
-            order.UserId = userId;
-
-            // SaveCartToCache(cart);
-            return Ok(order);
-        }
-
-
     }
 }
