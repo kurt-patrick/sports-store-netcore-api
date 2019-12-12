@@ -2,6 +2,8 @@
 using System;
 using SportsStoreApi.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace SportsStoreApi.Controllers
 {
@@ -11,11 +13,13 @@ namespace SportsStoreApi.Controllers
     {
         private readonly IMemoryCache _cache;
         private readonly IProductService _productService;
+        private readonly IUserService _userService;
 
-        public CartController(IProductService productService, IMemoryCache cache)
+        public CartController(IProductService productService, IUserService userService, IMemoryCache cache)
         {
             _cache = cache;
             _productService = productService;
+            _userService = userService;
         }
 
         private Entities.Cart GetCartFromCache(string guid)

@@ -6,6 +6,7 @@ namespace SportsStoreApi
 {
     public class StoreContext : DbContext
     {
+        public DbSet<Order> Orders { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<User> Users { get; set; }
 
@@ -34,6 +35,7 @@ namespace SportsStoreApi
                 entity.Property(e => e.Password).IsRequired();
             });
 
+            modelBuilder.Entity<Order>().HasMany(m => m.Items);
             modelBuilder.Entity<Product>().HasData(SeedData.ProductSeedData.Products);
             modelBuilder.Entity<User>().HasData(SeedData.UserSeedData.Users);
         }
