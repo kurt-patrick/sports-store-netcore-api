@@ -49,13 +49,13 @@ namespace SportsStoreApi.Controllers
             if(string.IsNullOrWhiteSpace(guid))
             {
                 Console.WriteLine($"SubmitCart({guid??""}): guid is null or empty");
-                return BadRequest(new { message = "Invalid cart guid" });
+                return NotFound(new { message = "Invalid cart guid" });
             }
 
             if(!_cache.TryGetValue(guid, out Entities.Cart cart))
             {
                 Console.WriteLine($"SubmitCart({guid??""}): guid not found in cache");
-                return BadRequest(new { message = "Invalid cart guid" });
+                return NotFound(new { message = "Invalid cart guid" });
             }
 
             Entities.Order order = Transformers.CartToOrderTransformer.Transform(cart);
@@ -88,9 +88,10 @@ namespace SportsStoreApi.Controllers
             if (user == null)
             {
                 Console.WriteLine("match not found");
-                return BadRequest(new { message = "User not found" });
+                return NotFound(new { message = "User not found" });
             }
             order.UserId = userId;
+
             Console.WriteLine($"UserId: {order.UserId}");
 
             var uniqueProductIds = order.Items.Select(p => p.ProductId).Distinct().ToList();
@@ -98,7 +99,7 @@ namespace SportsStoreApi.Controllers
             if(uniqueProductIds.Count != products.Count())
             {
                 Console.WriteLine("not all products were found");
-                return BadRequest(new { message = "not all products were found" });
+                return NotFound(new { message = "Products not found" });
             }
 
             Console.WriteLine("_orderService.Save(order);");
