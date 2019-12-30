@@ -32,7 +32,12 @@ namespace SportsStoreApi
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors();
+            services.AddCors(options => {
+                options.AddPolicy(
+                    "CorsPolicy", 
+                    builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+                );
+            });
 
             // Adds services for controllers to the specified Microsoft.Extensions.DependencyInjection.IServiceCollection. This method will not register services used for views or pages.
             services.AddControllers();
@@ -83,7 +88,6 @@ namespace SportsStoreApi
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IOrderService, OrderService>();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -95,12 +99,7 @@ namespace SportsStoreApi
             }
 
             app.UseRouting();
-
-            // global cors policy
-            app.UseCors(x => x
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader());
+            app.UseCors("CorsPolicy");
 
             app.UseAuthentication();
             app.UseAuthorization();

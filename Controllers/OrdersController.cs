@@ -36,7 +36,7 @@ namespace SportsStoreApi.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var users = _userService.GetAll();
+            var users = _orderService.GetAll();
             return Ok(users);
         }
 

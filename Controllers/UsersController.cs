@@ -5,6 +5,7 @@ using SportsStoreApi.Models;
 using System.Linq;
 using System;
 using SportsStoreApi.Interfaces;
+using Microsoft.AspNetCore.Cors;
 
 namespace SportsStoreApi.Controllers
 {
