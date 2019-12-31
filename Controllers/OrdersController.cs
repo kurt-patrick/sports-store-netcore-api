@@ -40,6 +40,51 @@ namespace SportsStoreApi.Controllers
             return Ok(users);
         }
 
+        [HttpGet("/orders/search")]
+        public IActionResult Search([FromQuery(Name = "orderid")] int orderId, [FromQuery(Name = "from")] string from, [FromQuery(Name = "to")] string to)
+        {
+            Console.WriteLine($"OrdersController.Search({orderId}, {from}, {to}) -------------------------------");
+            if (orderId > 0) 
+            {
+                var order = _orderService.GetByOrderId(orderId);
+                if (order == null)
+                {
+                    Console.WriteLine($"GetByOrderId({orderId}): match not found");
+                    return NotFound(new { message = "Invalid order id" });
+                }
+                return Ok(order);
+            }
+
+            // date range
+            bool hasFrom = DateTime.TryParse(from, out DateTime fromDate);
+            bool hasTo = DateTime.TryParse(from, out DateTime toDate);
+            if (!hasFrom && !hasTo)
+            {
+                fromDate = DateTime.Today;
+                toDate = DateTime.Today;
+            }
+            else
+            {
+                if (hasFrom && fromDate > DateTime.Today)
+                {
+                    fromDate = DateTime.Today;
+                }
+                if (hasTo)
+                {
+                    if (toDate > DateTime.Today)
+                    {
+                        toDate = DateTime.Today;
+                    }
+                    else if(hasFrom && toDate < fromDate)
+                    {
+                        toDate = DateTime.Today;
+                    }
+                }
+            }
+
+        }
+
+
         [Authorize]
         [HttpGet("/orders/{guid}/submit")]
         public IActionResult SubmitCart(string guid)

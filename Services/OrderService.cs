@@ -21,6 +21,13 @@ namespace SportsStoreApi.Services
             storeContext.Database.EnsureCreated();
         }
 
+        public Order GetByOrderId(int id)
+        {
+            Console.WriteLine("OrderService.GetByOrderId");
+            return _storeContext.Orders.FirstOrDefault(p => p.Id == id);
+        }
+
+
         public int Save(Order order)
         {
             Console.WriteLine("OrderService.Save()");
