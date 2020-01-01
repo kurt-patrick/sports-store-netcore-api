@@ -7,6 +7,8 @@ using System;
 using SportsStoreApi.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
 using System.Security.Claims;
+using System.Collections.Generic;
+using SportsStoreApi.Entities;
 
 namespace SportsStoreApi.Controllers
 {
@@ -46,44 +48,62 @@ namespace SportsStoreApi.Controllers
             Console.WriteLine($"OrdersController.Search({orderId}, {from}, {to}) -------------------------------");
             if (orderId > 0) 
             {
-                var order = _orderService.GetByOrderId(orderId);
+                var order = _orderService.SearchByOrderId(orderId);
                 if (order == null)
                 {
                     Console.WriteLine($"GetByOrderId({orderId}): match not found");
                     return NotFound(new { message = "Invalid order id" });
                 }
-                return Ok(order);
+                return Ok(new List<Order>() {order});
             }
 
-            // date range
-            bool hasFrom = DateTime.TryParse(from, out DateTime fromDate);
-            bool hasTo = DateTime.TryParse(from, out DateTime toDate);
+            ParseFromToDate(from, to, out DateTime fromDate, out DateTime toDate);
+            var orders = _orderService.SearchByDateRange(fromDate, toDate);
+            return Ok(orders);
+        }
+
+        private static void ParseFromToDate(string from, string to, out DateTime fromDate, out DateTime toDate)
+        {
+            bool hasFrom = DateTime.TryParse(from, out fromDate);
+            bool hasTo = DateTime.TryParse(from, out toDate);
             if (!hasFrom && !hasTo)
             {
                 fromDate = DateTime.Today;
                 toDate = DateTime.Today;
+                return;
             }
-            else
+
+            if (hasFrom && hasTo && fromDate > toDate)
             {
-                if (hasFrom && fromDate > DateTime.Today)
+                fromDate = DateTime.Parse(to);
+                toDate = DateTime.Parse(from);
+            }
+
+            if (hasFrom)
+            {
+                if (fromDate > DateTime.Today) 
                 {
                     fromDate = DateTime.Today;
                 }
-                if (hasTo)
+                if (!hasTo)
                 {
-                    if (toDate > DateTime.Today)
-                    {
-                        toDate = DateTime.Today;
-                    }
-                    else if(hasFrom && toDate < fromDate)
-                    {
-                        toDate = DateTime.Today;
-                    }
+                    toDate = DateTime.Today;
                 }
             }
 
-        }
+            if (hasTo)
+            {
+                if (toDate > DateTime.Today) 
+                {
+                    toDate = DateTime.Today;
+                }
+                if (!hasFrom)
+                {
+                    fromDate = toDate.AddYears(-1);
+                }
+            }
 
+        } // ParseFromToDate
 
         [Authorize]
         [HttpGet("/orders/{guid}/submit")]
