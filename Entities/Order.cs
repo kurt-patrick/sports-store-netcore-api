@@ -17,6 +17,7 @@ namespace SportsStoreApi.Entities
         public decimal IncTotal { get; set; }
         public decimal Gst { get; set; }
         public int QuantityTotal { get; set; }
+        public DateTime OrderDate {get; set;} = DateTime.UtcNow;
         public List<OrderItem> Items {get; set; } = new List<OrderItem>();
 
         public Order()

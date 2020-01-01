@@ -7,6 +7,9 @@ using System;
 using SportsStoreApi.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
 using System.Security.Claims;
+using System.Collections.Generic;
+using SportsStoreApi.Entities;
+using SportsStoreApi.Helpers;
 
 namespace SportsStoreApi.Controllers
 {
@@ -38,6 +41,27 @@ namespace SportsStoreApi.Controllers
         {
             var users = _orderService.GetAll();
             return Ok(users);
+        }
+
+        [HttpGet("/orders/search")]
+        public IActionResult Search([FromQuery(Name = "orderid")] int orderId, [FromQuery(Name = "from")] string from, [FromQuery(Name = "to")] string to)
+        {
+            Console.WriteLine($"OrdersController.Search({orderId}, {from}, {to}) -------------------------------");
+            if (orderId > 0) 
+            {
+                var order = _orderService.SearchByOrderId(orderId);
+                if (order == null)
+                {
+                    Console.WriteLine($"GetByOrderId({orderId}): match not found");
+                    return NotFound(new { message = "Invalid order id" });
+                }
+                return Ok(new List<Order>() {order});
+            }
+
+            DateTimeHelper.ParseDateRange(from, to, out DateTime fromDate, out DateTime toDate);
+
+            var orders = _orderService.SearchByDateRange(fromDate.ToUniversalTime(), toDate.ToUniversalTime());
+            return Ok(orders);
         }
 
         [Authorize]

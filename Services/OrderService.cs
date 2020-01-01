@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using SportsStoreApi.Entities;
 using SportsStoreApi.Interfaces;
 
@@ -21,6 +22,15 @@ namespace SportsStoreApi.Services
             storeContext.Database.EnsureCreated();
         }
 
+        public Order SearchByOrderId(int id)
+        {
+            Console.WriteLine($"OrderService.SearchByOrderId({id}");
+            return _storeContext.Orders
+                .Include(order => order.Items)
+                .FirstOrDefault(p => p.Id == id);
+        }
+
+
         public int Save(Order order)
         {
             Console.WriteLine("OrderService.Save()");
@@ -37,8 +47,21 @@ namespace SportsStoreApi.Services
         public IEnumerable<Order> GetAll()
         {
             Console.WriteLine("OrderService.GetAll");
-            return _storeContext.Orders.ToList();
+            return _storeContext.Orders
+                .Include(order => order.Items)
+                .ToList();
         }
+
+        public IEnumerable<Order> SearchByDateRange(DateTime from, DateTime to)
+        {
+            to = to.AddDays(1);
+            Console.WriteLine($"OrderService.SearchByDateRange({from}, {to})");
+            return _storeContext.Orders
+                .Include(order => order.Items)
+                .Where(order => order.OrderDate >= from && order.OrderDate <= to)
+                .ToList();
+        }
+
 
     }
 
