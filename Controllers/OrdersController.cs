@@ -9,6 +9,7 @@ using Microsoft.Extensions.Caching.Memory;
 using System.Security.Claims;
 using System.Collections.Generic;
 using SportsStoreApi.Entities;
+using SportsStoreApi.Helpers;
 
 namespace SportsStoreApi.Controllers
 {
@@ -57,53 +58,11 @@ namespace SportsStoreApi.Controllers
                 return Ok(new List<Order>() {order});
             }
 
-            ParseFromToDate(from, to, out DateTime fromDate, out DateTime toDate);
-            var orders = _orderService.SearchByDateRange(fromDate, toDate);
+            DateTimeHelper.ParseDateRange(from, to, out DateTime fromDate, out DateTime toDate);
+
+            var orders = _orderService.SearchByDateRange(fromDate.ToUniversalTime(), toDate.ToUniversalTime());
             return Ok(orders);
         }
-
-        private static void ParseFromToDate(string from, string to, out DateTime fromDate, out DateTime toDate)
-        {
-            bool hasFrom = DateTime.TryParse(from, out fromDate);
-            bool hasTo = DateTime.TryParse(from, out toDate);
-            if (!hasFrom && !hasTo)
-            {
-                fromDate = DateTime.Today;
-                toDate = DateTime.Today;
-                return;
-            }
-
-            if (hasFrom && hasTo && fromDate > toDate)
-            {
-                fromDate = DateTime.Parse(to);
-                toDate = DateTime.Parse(from);
-            }
-
-            if (hasFrom)
-            {
-                if (fromDate > DateTime.Today) 
-                {
-                    fromDate = DateTime.Today;
-                }
-                if (!hasTo)
-                {
-                    toDate = DateTime.Today;
-                }
-            }
-
-            if (hasTo)
-            {
-                if (toDate > DateTime.Today) 
-                {
-                    toDate = DateTime.Today;
-                }
-                if (!hasFrom)
-                {
-                    fromDate = toDate.AddYears(-1);
-                }
-            }
-
-        } // ParseFromToDate
 
         [Authorize]
         [HttpGet("/orders/{guid}/submit")]

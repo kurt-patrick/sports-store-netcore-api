@@ -54,6 +54,7 @@ namespace SportsStoreApi.Services
 
         public IEnumerable<Order> SearchByDateRange(DateTime from, DateTime to)
         {
+            to = to.AddDays(1);
             Console.WriteLine($"OrderService.SearchByDateRange({from}, {to})");
             return _storeContext.Orders
                 .Include(order => order.Items)
