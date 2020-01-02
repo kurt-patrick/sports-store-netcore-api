@@ -39,7 +39,7 @@ namespace SportsStoreApi.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var users = _orderService.GetAll();
+            var users = _orderService.GetAll(this.AuthenticatedUserId());
             return Ok(users);
         }
 
@@ -49,7 +49,7 @@ namespace SportsStoreApi.Controllers
             Console.WriteLine($"OrdersController.Search({orderId}, {from}, {to}) -------------------------------");
             if (orderId > 0) 
             {
-                var order = _orderService.SearchByOrderId(orderId);
+                var order = _orderService.SearchByOrderId(this.AuthenticatedUserId(), orderId);
                 if (order == null)
                 {
                     Console.WriteLine($"GetByOrderId({orderId}): match not found");
@@ -60,7 +60,7 @@ namespace SportsStoreApi.Controllers
 
             DateTimeHelper.ParseDateRange(from, to, out DateTime fromDate, out DateTime toDate);
 
-            var orders = _orderService.SearchByDateRange(fromDate.ToUniversalTime(), toDate.ToUniversalTime());
+            var orders = _orderService.SearchByDateRange(this.AuthenticatedUserId(), fromDate.ToUniversalTime(), toDate.ToUniversalTime());
             return Ok(orders);
         }
 
@@ -102,12 +102,7 @@ namespace SportsStoreApi.Controllers
             }
 
             // get the login in user
-            var claimsIdentity = this.User.Identity as ClaimsIdentity;
-            var userIdStr = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
-            Console.WriteLine($"userIdStr: {userIdStr??""}");
-            Int32.TryParse(userIdStr, out int userId);
-            Console.WriteLine($"userId: {userId}");
-
+            int userId = this.AuthenticatedUserId();
             var user = _userService.GetById(userId);
             if (user == null)
             {
@@ -141,6 +136,18 @@ namespace SportsStoreApi.Controllers
             _cache.Remove(guid);
 
             return Ok(order);
+
+        } // SubmitCart()
+
+        private int AuthenticatedUserId()
+        {
+            Console.WriteLine("OrdersController.UserId()");
+            var claimsIdentity = this.User.Identity as ClaimsIdentity;
+            var userIdStr = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
+            Console.WriteLine($"userIdStr: {userIdStr??""}");
+            Int32.TryParse(userIdStr, out int userId);
+            Console.WriteLine($"userId: {userId}");
+            return userId;
         }
 
     }

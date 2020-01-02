@@ -22,12 +22,12 @@ namespace SportsStoreApi.Services
             storeContext.Database.EnsureCreated();
         }
 
-        public Order SearchByOrderId(int id)
+        public Order SearchByOrderId(int userId, int id)
         {
-            Console.WriteLine($"OrderService.SearchByOrderId({id}");
+            Console.WriteLine($"OrderService.SearchByOrderId({userId}, {id}");
             return _storeContext.Orders
                 .Include(order => order.Items)
-                .FirstOrDefault(p => p.Id == id);
+                .FirstOrDefault(order => order.Id == id && order.UserId == userId);
         }
 
 
@@ -44,25 +44,24 @@ namespace SportsStoreApi.Services
             return id;
         }
 
-        public IEnumerable<Order> GetAll()
+        public IEnumerable<Order> GetAll(int userId)
         {
-            Console.WriteLine("OrderService.GetAll");
+            Console.WriteLine($"OrderService.GetAll({userId})");
             return _storeContext.Orders
-                .Include(order => order.Items)
+                .Where(order => order.UserId == userId)
                 .ToList();
         }
 
-        public IEnumerable<Order> SearchByDateRange(DateTime from, DateTime to)
+        public IEnumerable<Order> SearchByDateRange(int userId, DateTime from, DateTime to)
         {
             to = to.AddDays(1);
             Console.WriteLine($"OrderService.SearchByDateRange({from}, {to})");
             return _storeContext.Orders
-                .Include(order => order.Items)
                 .Where(order => order.OrderDate >= from && order.OrderDate <= to)
+                .Where(order => order.UserId == userId)
                 .ToList();
         }
 
+    } // class OrderService
 
-    }
-
-}
+} 
