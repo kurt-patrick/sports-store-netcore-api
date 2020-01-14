@@ -7,8 +7,8 @@ namespace SportsStoreApi.SeedData
     {
         private static List<User> _users = new List<User>
         {
-            new User { Id = 1, FirstName = "Dev", LastName = "Dev", Email = "dev@email.com", Password = "password" },
-            new User { Id = 2, FirstName = "Test", LastName = "Test", Email = "test@email.com", Password = "password" }
+            new User { Id = 1, FirstName = "Dev", LastName = "Dev", Email = "dev@email.com", PasswordHash = Auth.PasswordHasher.Hash("password") },
+            new User { Id = 2, FirstName = "Test", LastName = "Test", Email = "test@email.com", PasswordHash = Auth.PasswordHasher.Hash("password") }
         };
 
         public static User[] Users => _users.ToArray();

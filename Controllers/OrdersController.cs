@@ -22,7 +22,6 @@ namespace SportsStoreApi.Controllers
         private readonly IOrderService _orderService;
         private readonly IProductService _productService;
         private readonly IUserService _userService;
-        private readonly StoreContext _storeContext;
 
         public OrdersController(IUserService userService, IProductService productService, IOrderService orderService, StoreContext storeContext, IMemoryCache cache)
         {

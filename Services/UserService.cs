@@ -29,7 +29,7 @@ namespace SportsStoreApi.Services
             storeContext.Database.EnsureCreated();
         }
 
-        public User GetById(int id)
+        public AuthenticatedUserResponse GetById(int id)
         {
             var user = _storeContext.Users.FirstOrDefault(x => id == x.Id);
             if (user == null)
@@ -39,10 +39,10 @@ namespace SportsStoreApi.Services
             return user.WithoutPassword();
         }
 
-        public User Authenticate(string email, string password)
+        public AuthenticatedUserResponse Authenticate(string email, string password)
         {
-            var user = _storeContext.Users.FirstOrDefault(x => x.Email == email && x.Password == password);
-            if (user == null)
+            var user = _storeContext.Users.FirstOrDefault(user => user.Email == email);
+            if (user == null || !Auth.PasswordHasher.Check(user.PasswordHash, password))
             {
                 return null;
             }
@@ -64,9 +64,9 @@ namespace SportsStoreApi.Services
             return user.WithoutPassword();
         }
 
-        public IEnumerable<User> GetAll()
+        public IEnumerable<AuthenticatedUserResponse> GetAll()
         {
-            return _storeContext.Users.WithoutPasswords();
+            return _storeContext.Users.WithoutPassword();
         }
     }
 }

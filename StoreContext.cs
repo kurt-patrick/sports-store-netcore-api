@@ -31,8 +31,9 @@ namespace SportsStoreApi
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasKey(e => e.Id);
+                entity.Property(e => e.PasswordHash).IsRequired();
                 entity.Property(e => e.Email).IsRequired();
-                entity.Property(e => e.Password).IsRequired();
+                entity.HasIndex(e => e.Email).IsUnique(true);
             });
 
             modelBuilder.Entity<Order>().HasMany(m => m.Items);

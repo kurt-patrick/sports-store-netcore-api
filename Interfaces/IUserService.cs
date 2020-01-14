@@ -5,8 +5,8 @@ namespace SportsStoreApi.Interfaces
 {
     public interface IUserService
     {
-        User GetById(int id);
-        User Authenticate(string email, string password);
-        IEnumerable<User> GetAll();
+        AuthenticatedUserResponse GetById(int id);
+        AuthenticatedUserResponse Authenticate(string email, string password);
+        IEnumerable<AuthenticatedUserResponse> GetAll();
     }
 }
